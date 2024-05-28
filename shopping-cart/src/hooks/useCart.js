@@ -29,12 +29,6 @@ function useCart(){
         localStorage.setItem('cart', JSON.stringify(cart));
       }, [cart]);
     
-      // The second `useEffect` hook is used to retrieve the cart from local storage once website is loaded.
-      useEffect(() => {
-        const cart = JSON.parse(localStorage.getItem('cart'));
-        if(cart) setCart(cart);
-      }, []);
-    
     /**
      * Function to add a guitar to the cart.
      * If the guitar already exists in the cart, increase its quantity by 1.

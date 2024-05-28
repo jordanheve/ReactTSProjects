@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import {db} from '../data/db';
+import type { Guitar, CartItem, GuitarID } from '../types';
 function useCart(){
       // The initialCart function is a helper function that retrieves the cart from local storage.
-    const initialCart = () => {
+    const initialCart = () : CartItem[] => {
         const localStorageCart = localStorage.getItem('cart');
         return localStorageCart ? JSON.parse(localStorageCart) : [];
       }
@@ -29,11 +30,6 @@ function useCart(){
         localStorage.setItem('cart', JSON.stringify(cart));
       }, [cart]);
     
-      // The second `useEffect` hook is used to retrieve the cart from local storage once website is loaded.
-      useEffect(() => {
-        const cart = JSON.parse(localStorage.getItem('cart'));
-        if(cart) setCart(cart);
-      }, []);
     
     /**
      * Function to add a guitar to the cart.
@@ -47,15 +43,16 @@ function useCart(){
      * @param {string} guitar.image - The image URL of the guitar.
      * @returns {void}
      */
-    function addToCart(guitar) {
+    function addToCart(guitar :Guitar) {
       const itemsExists = cart.findIndex(item => item.id === guitar.id);
       if(itemsExists >= 0) {
         if(cart[itemsExists].quantity >= MAX_QUANTITY) return;
-        const newCart = [...cart];
+        const newCart  = [...cart];
         newCart[itemsExists].quantity++;
         setCart(newCart);
       } else {    
-        setCart([...cart, {...guitar, quantity: 1 }]);
+        const newItem : CartItem =  {...guitar, quantity: 1};
+        setCart([...cart, newItem]);
       } 
     }
     
@@ -64,7 +61,7 @@ function useCart(){
      * @param {number} id - The unique identifier of the guitar to be removed.
      * @returns {void}
      */
-    function removeFromCart(id) {
+    function removeFromCart(id: GuitarID):void {
       setCart(prevCart => prevCart.filter(item => item.id!== id));
     }
     
@@ -74,7 +71,7 @@ function useCart(){
      * @param {number} id - The unique identifier of the guitar to be incremented.
      * @returns {void}
      */
-    function increment(id) {
+    function increment(id : GuitarID) : void {
       const updatedCart = cart.map(item => {
         if(item.id === id && item.quantity < MAX_QUANTITY) {
           return {
@@ -92,7 +89,7 @@ function useCart(){
      * @param {number} id - The unique identifier of the guitar to be decremented.
      * @returns {void}
      */
-    function decrement(id) {
+    function decrement(id :GuitarID):void  {
       const updatedCart = cart.map(item => {
         if(item.id === id && item.quantity > MIN_QUANTITY) {
           return {
@@ -108,7 +105,7 @@ function useCart(){
      * Function to clear the cart.
      * @returns {void}
      */
-    function clearCart () {
+    function clearCart ():void {
       setCart([]);
     }
     const isEmpty = useMemo( () => cart.length === 0, [cart]);
