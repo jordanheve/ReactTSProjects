@@ -11,12 +11,10 @@ export default function OrderContents({order, removeItem} : OrderContentsProps) 
             Consumo
         </h2>
         <div className="space-y-3 mt-5">
-            {order.length === 0 ?
-            <p className="text-center">
-                La orden está vacía
-            </p>
-            : (
-                order.map((item) => (
+            
+          
+            
+                {order.map((item) => (
                     <div key={item.id} className="relative border border-dashed border-slate-300 p-4 py-5">
                         <p>
                             {item.name} - {formatCurrency(item.price)} 
@@ -31,11 +29,9 @@ export default function OrderContents({order, removeItem} : OrderContentsProps) 
                         </button>
                     </div>
                     
-                ))
-            )
+                ))}
              
                 
-        }
         </div>
     </div>
   )

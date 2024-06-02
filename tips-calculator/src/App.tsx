@@ -4,9 +4,10 @@ import {Item} from "./types/index"
 import useOrder from "./hooks/useOrder"
 import OrderContents from './components/OrderContents'
 import OrderTotals from './components/OrderTotals'
+import TipPercentageForm from "./components/TipPercentageForm"
 function App() {
 
-const {addItem, removeItem, order} = useOrder()
+const {addItem, removeItem, order, tip, setTip, placeOrder} = useOrder()
   return (
     <>
      <header className="bg-red-500 text-white p-2">
@@ -27,13 +28,29 @@ const {addItem, removeItem, order} = useOrder()
         }
       </section>
       <section className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
-        <OrderContents 
-        removeItem={removeItem}
-        order={order}
-        />
-        <OrderTotals
-        order = {order}
-        />
+        {
+          order.length > 0 ?
+          (
+            <>
+            <OrderContents 
+            removeItem={removeItem}
+            order={order}
+            />
+            <TipPercentageForm
+            setTip={setTip}
+            tip={tip}
+            />
+            <OrderTotals
+            order = {order}
+            tip={tip}
+            placeOrder={placeOrder}
+            />
+            </>) : (  <p className="text-center">
+                La orden está vacía
+            </p>)
+        }
+
+
       </section>
      </main>  
     </>
