@@ -14,8 +14,13 @@ export default function useOrder() {
         }
     }
 
+    const removeItem = (id: Item['id']) => {
+        setOrder(prevOrder => prevOrder.filter(item => item.id!== id))
+    }
 
     return {
-        addItem
+        addItem,
+        removeItem,
+        order
     }
 }

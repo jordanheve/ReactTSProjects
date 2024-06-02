@@ -2,9 +2,11 @@ import { menuItems } from "./data/db"
 import MenuItem from './components/MenuItem'
 import {Item} from "./types/index"
 import useOrder from "./hooks/useOrder"
+import OrderContents from './components/OrderContents'
+import OrderTotals from './components/OrderTotals'
 function App() {
 
-const {addItem} = useOrder()
+const {addItem, removeItem, order} = useOrder()
   return (
     <>
      <header className="bg-red-500 text-white p-2">
@@ -24,8 +26,14 @@ const {addItem} = useOrder()
           ))
         }
       </section>
-      <section>
-        <h2 className="text-center text-2xl">Consume</h2>
+      <section className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
+        <OrderContents 
+        removeItem={removeItem}
+        order={order}
+        />
+        <OrderTotals
+        order = {order}
+        />
       </section>
      </main>  
     </>
