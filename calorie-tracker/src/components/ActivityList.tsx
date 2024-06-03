@@ -1,7 +1,7 @@
 import type { Activity } from '../types';
 import { categories } from '../data/categories';
 import { useMemo, Dispatch } from 'react';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { ActivityActions } from '../reducers/activity-reducers';
 type ActivityListProps = {
     activities: Activity[],
@@ -32,8 +32,11 @@ export default function ActivityList({ activities, dispatch} : ActivityListProps
                         <span>Calories</span></p>
                 </div>
                 <div className='flex gap-5 items-center'>
-                    <button>
-                        <PencilSquareIcon onClick={() => dispatch({type:"set-activeId", payload: {id: activity.id}})} className='h-6 w-6 text-slate-500'/>
+                    <button onClick={() => dispatch({type:"set-activeId", payload: {id: activity.id}})}>
+                        <PencilSquareIcon  className='h-6 w-6 text-slate-500'/>
+                    </button>
+                    <button onClick={() => dispatch({type:"remove-activity", payload: {id: activity.id}})}>
+                        <XCircleIcon  className='h-6 w-6 text-red-400'/>
                     </button>
                 </div>
             </div>
