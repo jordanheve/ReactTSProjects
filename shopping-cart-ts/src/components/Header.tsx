@@ -1,15 +1,15 @@
-import type { CartItem, GuitarID } from "../types";
-
+import { CartActions } from "../reducers/cart-reducers";
+import type { CartItem, } from "../types";
+import { Dispatch, useMemo } from "react";
 type HeaderProps = {
   cart: CartItem[],
-  removeFromCart: (id: GuitarID) => void,
-  increment: (id: number) => void,
+  dispatch: Dispatch<CartActions>,
   decrement: (id: number) => void,
   clearCart: () => void,
-  isEmpty: boolean,
-  cartTotal: number,
 }
-export default function Header({ cart, removeFromCart, increment, decrement, clearCart, isEmpty, cartTotal} : HeaderProps) {
+export default function Header({ cart, dispatch, decrement, clearCart,} : HeaderProps) {
+  const isEmpty = useMemo( () => cart.length === 0, [cart]);
+  const cartTotal = useMemo(  () => cart.reduce((total, item) => total + item.price * item.quantity, 0),[cart]); 
 
     return (
       <>
@@ -66,7 +66,7 @@ export default function Header({ cart, removeFromCart, increment, decrement, cle
                                     -
                                   </button>
                                   {guitar.quantity}
-                                  <button type="button" className="btn btn-dark" onClick={() => increment(guitar.id)}>
+                                  <button type="button" className="btn btn-dark" onClick={() => dispatch({type: 'increase-quantity', payload: {id: guitar.id}})}>
                                     +
                                   </button>
                                 </td>
@@ -74,7 +74,7 @@ export default function Header({ cart, removeFromCart, increment, decrement, cle
                                   <button
                                     className="btn btn-danger"
                                     type="button"
-                                    onClick={() => removeFromCart(guitar.id)}
+                                    onClick={() => dispatch({ type: "remove-from-cart", payload: { id: guitar.id } })}
                                   >
                                     X
                                   </button>

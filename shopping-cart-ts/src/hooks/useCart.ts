@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import {db} from '../data/db';
-import type { Guitar, CartItem, GuitarID } from '../types';
+import { useState, useEffect, } from "react";
+import type {  CartItem, GuitarID } from '../types';
 function useCart(){
       // The initialCart function is a helper function that retrieves the cart from local storage.
     const initialCart = () : CartItem[] => {
@@ -8,7 +7,6 @@ function useCart(){
         return localStorageCart ? JSON.parse(localStorageCart) : [];
       }
     
-      const [data] = useState(db);
       const [cart, setCart] = useState(initialCart);
     
       /*
@@ -31,40 +29,13 @@ function useCart(){
       }, [cart]);
     
     
-    /**
-     * Function to add a guitar to the cart.
-     * If the guitar already exists in the cart, increase its quantity by 1.
-     * If the guitar does not exist in the cart, add it with a quantity of 1.
-     * If the quantity of the guitar in the cart reaches the maximum limit, do not add more.
-     * @param {Object} guitar - The guitar object to be added to the cart.
-     * @param {number} guitar.id - The unique identifier of the guitar.
-     * @param {string} guitar.name - The name of the guitar.
-     * @param {number} guitar.price - The price of the guitar.
-     * @param {string} guitar.image - The image URL of the guitar.
-     * @returns {void}
-     */
-    function addToCart(guitar :Guitar) {
-      const itemsExists = cart.findIndex(item => item.id === guitar.id);
-      if(itemsExists >= 0) {
-        if(cart[itemsExists].quantity >= MAX_QUANTITY) return;
-        const newCart  = [...cart];
-        newCart[itemsExists].quantity++;
-        setCart(newCart);
-      } else {    
-        const newItem : CartItem =  {...guitar, quantity: 1};
-        setCart([...cart, newItem]);
-      } 
-    }
     
     /**
      * Function to remove a guitar from the cart.
      * @param {number} id - The unique identifier of the guitar to be removed.
      * @returns {void}
      */
-    function removeFromCart(id: GuitarID):void {
-      setCart(prevCart => prevCart.filter(item => item.id!== id));
-    }
-    
+
     /**
      * Function to increment the quantity of a guitar in the cart.
      * If the quantity reaches the maximum limit, do not increment.
@@ -108,19 +79,12 @@ function useCart(){
     function clearCart ():void {
       setCart([]);
     }
-    const isEmpty = useMemo( () => cart.length === 0, [cart]);
-    const cartTotal = useMemo(  () => cart.reduce((total, item) => total + item.price * item.quantity, 0),[cart]); 
 
     return {
-        data,
         cart,
-        addToCart,
-        removeFromCart,
         increment,
         decrement,
         clearCart,
-        isEmpty,
-        cartTotal,
     }
 }
 
