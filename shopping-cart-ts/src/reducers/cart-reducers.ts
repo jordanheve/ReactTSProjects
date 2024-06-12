@@ -4,7 +4,7 @@ import { CartItem, Guitar } from '../types'
 const MAX_QUANTITY = 10;
 const MIN_QUANTITY = 1;
 export type CartActions = 
-    { type: 'add-to-cart', payload: { item:Guitar } } |
+    {type: 'add-to-cart', payload: { item:Guitar } } |
     {type: 'remove-from-cart', payload: {id: Guitar['id']} } |
     {type: 'decrease-quantity', payload: {id: Guitar['id']}} |
     {type: 'increase-quantity', payload: {id: Guitar['id']}} |
@@ -15,10 +15,17 @@ export type CartActions =
         data: Guitar[],
         cart: CartItem[],
     } 
+    const initialCart = () : CartItem[] => {
+      const localStorageCart = localStorage.getItem('cart');
+      return localStorageCart ? JSON.parse(localStorageCart) : [];
+    }
+        // The first `useEffect` hook is used to save the cart to local storage whenever the cart state changes.
+        
+      
 
     export const initialState : CartState = {
         data: db,
-        cart: [],
+        cart: initialCart(),
     }
 
     export const cartReducer = (
@@ -54,7 +61,16 @@ export type CartActions =
             return {...state, cart}
         }
         if(action.type ==='decrease-quantity'){
-            return {...state}
+            const cart = state.cart.map(item => {
+                if(item.id === action.payload.id && item.quantity > MIN_QUANTITY) {
+                  return {
+                   ...item, quantity: item.quantity - 1
+                  }
+                }
+                return item;
+              })
+
+            return {...state, cart}
         }
         if(action.type ==='increase-quantity'){
             const cart = state.cart.map(item => {
@@ -69,7 +85,7 @@ export type CartActions =
             return {...state, cart }
         }
         if(action.type ==='clear-cart'){
-            return {...state}
+            return {...state, cart: []}
         }
         return state
     }

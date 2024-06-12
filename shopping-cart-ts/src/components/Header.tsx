@@ -4,10 +4,8 @@ import { Dispatch, useMemo } from "react";
 type HeaderProps = {
   cart: CartItem[],
   dispatch: Dispatch<CartActions>,
-  decrement: (id: number) => void,
-  clearCart: () => void,
 }
-export default function Header({ cart, dispatch, decrement, clearCart,} : HeaderProps) {
+export default function Header({ cart, dispatch} : HeaderProps) {
   const isEmpty = useMemo( () => cart.length === 0, [cart]);
   const cartTotal = useMemo(  () => cart.reduce((total, item) => total + item.price * item.quantity, 0),[cart]); 
 
@@ -62,7 +60,7 @@ export default function Header({ cart, dispatch, decrement, clearCart,} : Header
                                 <td>{guitar.name}</td>
                                 <td className="fw-bold">${guitar.price}</td>
                                 <td className="flex align-items-start gap-4">
-                                  <button type="button" className="btn btn-dark" onClick={() => decrement(guitar.id)}>
+                                  <button type="button" className="btn btn-dark" onClick={() => dispatch({type: 'decrease-quantity', payload: {id:guitar.id}})}>
                                     -
                                   </button>
                                   {guitar.quantity}
@@ -91,7 +89,7 @@ export default function Header({ cart, dispatch, decrement, clearCart,} : Header
                             {cartTotal}
                           </span>
                         </p>
-                        <button className="btn btn-dark w-100 mt-3 p-2" onClick={clearCart}>
+                        <button className="btn btn-dark w-100 mt-3 p-2" onClick={()=>dispatch({type:"clear-cart"})}>
                           Vaciar Carrito
                         </button>
                       </>
