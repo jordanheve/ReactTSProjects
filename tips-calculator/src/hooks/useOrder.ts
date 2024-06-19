@@ -1,3 +1,4 @@
+// no longer needed, this is a diferen way to handle the order state
 import { useState } from "react"
 import type { OrderItem, Item } from '../types'
 export default function useOrder() {
