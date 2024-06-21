@@ -1,11 +1,11 @@
 export type BudgetActions = 
-    { type: 'add-budget', payload: { budget: number } } 
+    { type: 'add-budget'; payload: { budget: number } };
 
 export type BudgetState = {
-    budget: number,
-}
+    budget: number;
+};
 
-export const initialState : BudgetState = { budget: 0 }
+export const initialState: BudgetState = { budget: 0 };
 
 export const budgetReducer = (
     state:BudgetState = initialState,
@@ -17,5 +17,5 @@ export const budgetReducer = (
                 budget: action.payload.budget
             }
         }
-
+        return state;
     };
