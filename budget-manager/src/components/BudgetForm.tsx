@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { ChangeEvent } from "react";
+import { useBudget } from "../hooks/useBudget";
 export default function BudgetForm() {
     const [budget, setBudget] = useState<number | null>(0);
-
+    const { dispatch } = useBudget();
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       let string = e.target.value;
       string = string.replace(/^0+/, "").replace(/\D/g, "");
@@ -18,8 +19,14 @@ export default function BudgetForm() {
       return budget === null || budget <= 0;
     }, [budget]);
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      dispatch({ type: "add-budget", payload: { budget } });
+      
+    }
+
   return (
-    <form action="space-y-5">
+    <form action="space-y-5" onSubmit={handleSubmit}>
       <div className="flex flex-col space-y-5">
         <label
           htmlFor="budget"
