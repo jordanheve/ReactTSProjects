@@ -45,7 +45,7 @@ export default function BudgetForm() {
         />
       </div>
       <input
-        type="button"
+        type="submit"
         value="Submit"
         className="bg-blue-600 hover:bg-blue-700 cursor-pointer w-full p-2 text-white uppercase font-bold text-center  disabled:cursor-not-allowed disabled:opacity-50"
         disabled={isValid}
