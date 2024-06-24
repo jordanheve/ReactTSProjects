@@ -1,5 +1,5 @@
 export type BudgetActions = 
-    { type: 'add-budget'; payload: { budget: number | null } };
+    { type: 'add-budget'; payload: { budget: number | null } } ;
 
 export type BudgetState = {
     budget: number;
