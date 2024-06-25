@@ -1,6 +1,7 @@
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
-import { Dialog, DialogPanel, Description, DialogTitle, DialogBackdrop } from '@headlessui/react'
+import { Dialog, DialogPanel, DialogBackdrop } from '@headlessui/react'
 import { useState } from 'react'
+import ExpenseForm from './ExpenseForm'
 export default function ExpenseModal() {
 
   const [isOpen, setIsOpen] = useState(false)
@@ -20,14 +21,8 @@ export default function ExpenseModal() {
         >
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-          <DialogPanel className="max-w-lg space-y-4 border bg-white p-12 rounded-xl">
-            <DialogTitle className="font-bold">Add Expenses</DialogTitle>
-            <Description>Loremipsum</Description>
-            <p>loremipsum</p>
-            <div className="flex gap-4">
-              <button onClick={() => setIsOpen(false)}>Cancel</button>
-              <button onClick={() => setIsOpen(false)}>Deactivate</button>
-            </div>
+          <DialogPanel className="max-w-lg w-full space-y-4 border bg-white p-12 rounded-xl">
+           <ExpenseForm />
           </DialogPanel>
         </div>
       </Dialog>
