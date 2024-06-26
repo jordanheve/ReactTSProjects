@@ -6,13 +6,18 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { DraftExpense, Value } from "../types";
-export default function ExpenseForm() {
+import { useBudget } from "../hooks/useBudget";
+interface ExpenseFormProps {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export default function ExpenseForm({setIsOpen}  : ExpenseFormProps ){
   const [expense, setExpense] = useState<DraftExpense>({
     amount: 0,
     expenseName: '',
     category: '',
     date: new Date()
   })
+  const {dispatch} = useBudget()
 
   const handleChangeDate = (value: Value) => {
     setExpense({ ...expense, date: value })
@@ -34,6 +39,8 @@ export default function ExpenseForm() {
       return
     }
     setError('')
+    dispatch({ type: "add-expense", payload: { expense } });
+    setIsOpen(false)
   }
 
   return (

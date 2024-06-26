@@ -22,7 +22,7 @@ export default function ExpenseModal() {
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
           <DialogPanel className="max-w-lg w-full space-y-4 border bg-white p-12 rounded-xl">
-           <ExpenseForm />
+           <ExpenseForm setIsOpen = {setIsOpen}/>
           </DialogPanel>
         </div>
       </Dialog>
