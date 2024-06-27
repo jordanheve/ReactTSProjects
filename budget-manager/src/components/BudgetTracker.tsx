@@ -2,7 +2,7 @@ import AmountDisplay from "./AmountDisplay";
 
 export default function BudgetTracker() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols2 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="flex justify-center">
         <img src="/grafico.jpg" alt="grafica de datos" />
       </div>

@@ -41,6 +41,12 @@ export default function ExpenseForm({setIsOpen}  : ExpenseFormProps ){
     setError('')
     dispatch({ type: "add-expense", payload: { expense } });
     setIsOpen(false)
+    // setExpense({
+    //   amount: 0,
+    //   expenseName: '',
+    //   category: '',
+    //   date: new Date()
+    // })
   }
 
   return (
