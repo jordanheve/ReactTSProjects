@@ -3,7 +3,8 @@ import { DraftExpense, Expense } from "../types";
 
 export type BudgetActions = 
     { type: 'add-budget'; payload: { budget: number } } |
-    {type: 'add-expense'; payload: { expense: DraftExpense } } ;
+    {type: 'add-expense'; payload: { expense: DraftExpense } } |
+    { type: 'remove-expense', payload: { id: Expense['id'] } } 
 
 export type BudgetState = {
     budget: number
@@ -37,6 +38,11 @@ export const budgetReducer = (
                 expenses: [...state.expenses, expense],
             };
         }
+        case 'remove-expense':
+            return {
+                ...state,
+                expenses: state.expenses.filter((expense) => expense.id !== action.payload.id),
+            };
 
         default:
             return state;
