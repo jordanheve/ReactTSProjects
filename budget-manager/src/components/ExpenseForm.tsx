@@ -50,7 +50,12 @@ export default function ExpenseForm(){
       return
     }
     setError('')
-    dispatch({ type: "add-expense", payload: { expense } });
+
+    if(state.editingId){
+      dispatch({ type: "update-expense", payload: { expense: {id: state.editingId, ...expense} } });
+    }else{
+      dispatch({ type: "add-expense", payload: { expense } });
+    }
     
   }
 
@@ -127,7 +132,7 @@ export default function ExpenseForm(){
         <input
           type="submit"
           className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg text-center"
-          value="Add Expense"
+          value={state.editingId ? 'Update Expense' : 'Add Expense'}
         />
       </fieldset>
     </form>

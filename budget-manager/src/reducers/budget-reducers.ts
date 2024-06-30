@@ -7,7 +7,8 @@ export type BudgetActions =
     { type: 'remove-expense', payload: { id: Expense['id'] } } |
     { type: 'open-modal'} |
     { type: 'close-modal'} |
-    {type: 'get-expense-by-id', payload: { id: Expense['id'] } } 
+    {type: 'get-expense-by-id', payload: { id: Expense['id'] } } | 
+    { type: 'update-expense', payload: { expense: Expense } } ;  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense
 
 export type BudgetState = {
     budget: number
@@ -59,6 +60,15 @@ export const budgetReducer = (
                 editingId: action.payload.id,
                 modalOpen:true,
             };
+
+        case "update-expense":
+            return {
+                ...state,
+                expenses: state.expenses.map((expense) => expense.id === state.editingId ? action.payload.expense : expense),
+                modalOpen: false,
+                editingId: '',
+                // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id
+            }
 
 
         case 'open-modal':
