@@ -4,16 +4,23 @@ import { DraftExpense, Expense } from "../types";
 export type BudgetActions = 
     { type: 'add-budget'; payload: { budget: number } } |
     {type: 'add-expense'; payload: { expense: DraftExpense } } |
-    { type: 'remove-expense', payload: { id: Expense['id'] } } 
+    { type: 'remove-expense', payload: { id: Expense['id'] } } |
+    { type: 'open-modal'} |
+    { type: 'close-modal'} |
+    {type: 'get-expense-by-id', payload: { id: Expense['id'] } }
 
 export type BudgetState = {
     budget: number
-    expenses : Expense[]
+    expenses : Expense[],
+    modalOpen: boolean,
+    editinId : Expense['id']
 };
 
 export const initialState: BudgetState = { 
     budget: 0,
     expenses: [],
+    modalOpen: false,
+    editinId: '',
     };
 
 export const budgetReducer = (
@@ -35,6 +42,7 @@ export const budgetReducer = (
             };
             return {
                 ...state,
+                modalOpen: false,
                 expenses: [...state.expenses, expense],
             };
         }
@@ -42,6 +50,24 @@ export const budgetReducer = (
             return {
                 ...state,
                 expenses: state.expenses.filter((expense) => expense.id !== action.payload.id),
+            };
+
+        case "get-expense-by-id":
+            return {
+               ...state,
+                editinId: action.payload.id,
+                modalOpen:true,
+            };
+
+        case 'open-modal':
+            return {
+                ...state,
+                modalOpen: true,
+            };
+        case 'close-modal':
+            return {
+                ...state,
+                modalOpen: false,
             };
 
         default:
