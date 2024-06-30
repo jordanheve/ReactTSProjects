@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { DraftExpense, Expense } from "../types";
+import { Category, DraftExpense, Expense } from "../types";
 
 export type BudgetActions = 
     { type: 'add-budget'; payload: { budget: number } } |
@@ -8,21 +8,36 @@ export type BudgetActions =
     { type: 'open-modal'} |
     { type: 'close-modal'} |
     {type: 'get-expense-by-id', payload: { id: Expense['id'] } } | 
-    { type: 'update-expense', payload: { expense: Expense } } ;  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense
+    { type: 'update-expense', payload: { expense: Expense } } |
+    { type: 'reset-app'} |
+    { type: 'filter-category', payload: { id: Category['id'] } };
 
 export type BudgetState = {
     budget: number
     expenses : Expense[],
     modalOpen: boolean,
     editingId : Expense['id']
+    currentCategory: Category['id']
 };
 
+const initialBudget = () : number => {
+    const localStorageBudget = localStorage.getItem('budget');
+    return localStorageBudget ? +localStorageBudget : 0;
+}
+
+const localStorageExpenses = () : Expense[] => {
+    const expenses = localStorage.getItem('expenses');
+    return expenses ? JSON.parse(expenses) : [];
+}
+
 export const initialState: BudgetState = { 
-    budget: 0,
-    expenses: [],
+    budget: initialBudget(),
+    expenses: localStorageExpenses(), 
     modalOpen: false,
     editingId: '',
+    currentCategory: '',
     };
+
 
 export const budgetReducer = (
     state: BudgetState = initialState,
@@ -67,10 +82,7 @@ export const budgetReducer = (
                 expenses: state.expenses.map((expense) => expense.id === state.editingId ? action.payload.expense : expense),
                 modalOpen: false,
                 editingId: '',
-                // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id  // Update expense by id
             }
-
-
         case 'open-modal':
             return {
                 ...state,
@@ -82,6 +94,16 @@ export const budgetReducer = (
                 modalOpen: false,
                 editingId: '',
             };
+
+        case'reset-app':
+            localStorage.removeItem('budget');
+            localStorage.removeItem('expenses');
+            return initialState;
+        case 'filter-category':
+            return {
+               ...state,
+                currentCategory: action.payload.id,
+            }
 
         default:
             return state;
