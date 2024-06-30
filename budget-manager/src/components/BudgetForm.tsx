@@ -2,21 +2,21 @@ import { useState, useMemo } from "react";
 import { ChangeEvent } from "react";
 import { useBudget } from "../hooks/useBudget";
 export default function BudgetForm() {
-    const [budget, setBudget] = useState<number | null>(0);
+    const [budget, setBudget] = useState(0);
     const { dispatch } = useBudget();
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       let string = e.target.value;
       string = string.replace(/^0+/, "").replace(/\D/g, "");
       const number = parseInt(string);
       if (isNaN(number)) {
-        setBudget(null);
+        setBudget(0);
       } else {
         setBudget(number);
       }
     };
   
     const isValid = useMemo(() => {
-      return budget === null || budget <= 0;
+      return  budget <= 0;
     }, [budget]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,7 +41,7 @@ export default function BudgetForm() {
           name="budget"
           id="budget"
           onChange={handleChange}
-          value={budget !== null ? budget : ""}
+          value={budget !== 0 ? budget : ""}
         />
       </div>
       <input

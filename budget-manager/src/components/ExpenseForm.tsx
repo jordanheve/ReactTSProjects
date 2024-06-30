@@ -1,6 +1,6 @@
 
 import { categories } from "../data/categories"
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect, useMemo } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-calendar/dist/Calendar.css';
 import 'react-date-picker/dist/DatePicker.css';
@@ -9,18 +9,31 @@ import { DraftExpense, Value } from "../types";
 import { useBudget } from "../hooks/useBudget";
 
 export default function ExpenseForm(){
-  const [expense, setExpense] = useState<DraftExpense>({
+  const INITIAL_EXPENSE = useMemo(() => ({
     amount: 0,
     expenseName: '',
     category: '',
     date: new Date()
-  })
-  const {dispatch} = useBudget()
+  }), []);
+
+  const [expense, setExpense] = useState<DraftExpense>(INITIAL_EXPENSE)
+  const {state, dispatch} = useBudget()
+
+  useEffect(() => {
+    if (state.editingId) {
+      const editingExpense = state.expenses.find(currentExpense => currentExpense.id === state.editingId);
+      if (editingExpense) {
+        setExpense(editingExpense);
+      }
+    }else {
+      setExpense(INITIAL_EXPENSE);
+    }
+  }, [state.editingId, INITIAL_EXPENSE, state.expenses]);
 
   const handleChangeDate = (value: Value) => {
     setExpense({ ...expense, date: value })
   }
-
+  
   const [error, setError] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -38,6 +51,7 @@ export default function ExpenseForm(){
     }
     setError('')
     dispatch({ type: "add-expense", payload: { expense } });
+    
   }
 
   return (
