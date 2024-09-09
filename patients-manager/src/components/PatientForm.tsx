@@ -1,10 +1,15 @@
 import type { DraftPatient } from '../types';
 import { useForm } from "react-hook-form"
+import { usePatientStore } from '../store';
 import Error from "./Error"
+
 export default function PatientForm() {
+
+    const {addPattient} = usePatientStore();
+
     const { register, handleSubmit, formState : {errors} } = useForm<DraftPatient>();
     const registerPatient = (data : DraftPatient) => {
-        console.log(data)
+        addPattient(data);
     }
 
     return (
