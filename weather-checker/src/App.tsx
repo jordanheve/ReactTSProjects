@@ -2,7 +2,7 @@ import styles from "./App.module.css";
 import Form from "./components/form/Form";
 import useWeather from "./hooks/useWeather";
 function App() {
-  const { fetchWeather } = useWeather();
+  const { fetchWeather, weather } = useWeather();
   return (
     <>
       <h1 className={styles.title}>clima</h1>

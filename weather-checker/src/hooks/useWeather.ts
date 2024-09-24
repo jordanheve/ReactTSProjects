@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SearchType} from "../types";
 import {z} from 'zod';
-
+import { useState } from "react";
 // function isWeatherResponse(weather : unknown) : weather is Weather {
 //     return (
 //         Boolean(weather) &&
@@ -15,7 +15,6 @@ import {z} from 'zod';
 // }
 
 // zod
-
 const Weather = z.object({
   name: z.string(),
     main: z.object({
@@ -25,9 +24,19 @@ const Weather = z.object({
     })
 })
 
-type Weather = z.infer<typeof Weather>
+export type Weather = z.infer<typeof Weather>
 
 export default function useWeather() {
+
+  const [weather, setWeather] = useState<Weather>({
+    name: '',
+    main: {
+      temp: 0,
+      temp_min: 0,
+      temp_max: 0
+    }
+  });
+
   const fetchWeather = async (search: SearchType) => {
     const appId = import.meta.env.VITE_API_KEY;
     try {
@@ -45,7 +54,7 @@ export default function useWeather() {
       const result = Weather.safeParse(weatherResult);
 
       if(result.success){
-        console.log(result.data);
+        setWeather(result.data);
       }
     } catch (error) {
       console.error(error);
@@ -53,6 +62,7 @@ export default function useWeather() {
   };
 
   return {
+    weather,
     fetchWeather,
   };
 }
