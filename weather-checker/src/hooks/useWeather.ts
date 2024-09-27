@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SearchType} from "../types";
-import {z} from 'zod';
-import { useState } from "react";
+import {set, z} from 'zod';
+import { useMemo, useState } from "react";
 // function isWeatherResponse(weather : unknown) : weather is Weather {
 //     return (
 //         Boolean(weather) &&
@@ -24,24 +24,40 @@ const Weather = z.object({
     })
 })
 
+
 export type Weather = z.infer<typeof Weather>
+
+const INITIAL_WEATHER: Weather = {
+  name: '',
+  main: {
+    temp: 0,
+    temp_min: 0,
+    temp_max: 0
+  }
+}
 
 export default function useWeather() {
 
-  const [weather, setWeather] = useState<Weather>({
-    name: '',
-    main: {
-      temp: 0,
-      temp_min: 0,
-      temp_max: 0
-    }
-  });
+  const [weather, setWeather] = useState<Weather>(INITIAL_WEATHER);
+  const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const fetchWeather = async (search: SearchType) => {
     const appId = import.meta.env.VITE_API_KEY;
+    setLoading(true);
     try {
       const geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appId}`;
       const { data } = await axios(geoUrl);
+
+      if(!data[0]){
+        setNotFound(true);
+        setLoading(false);
+        setWeather(INITIAL_WEATHER);
+        return;
+      }else{
+        setNotFound(false);
+      }
+
       const lat = data[0].lat;
       const lon = data[0].lon;
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
@@ -58,11 +74,18 @@ export default function useWeather() {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const hasWeatherData = useMemo(() => weather.name  ,[weather]);
+
   return {
     weather,
+    loading,
     fetchWeather,
+    hasWeatherData,
+    notFound
   };
 }
