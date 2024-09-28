@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SearchType} from "../types";
-import {set, z} from 'zod';
+import {z} from 'zod';
 import { useMemo, useState } from "react";
 // function isWeatherResponse(weather : unknown) : weather is Weather {
 //     return (
